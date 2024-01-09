@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject; // <-- import JWTSubject
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject // <-- tambahkan ini
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -81,5 +81,35 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * posts
+     *
+     * @return void
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
+     * products
+     *
+     * @return void
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * pages
+     *
+     * @return void
+     */
+    public function pages()
+    {
+        return $this->hasMany(Page::class);
     }
 }
