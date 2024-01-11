@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Models\Category;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CategoryResource;
-use Illuminate\Support\Facades\Validator;
+use App\Services\CategoryServices;
 
 class CategoryController extends Controller
 {
@@ -18,16 +16,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //get categories
-        $categories = Category::when(request()->search, function ($categories) {
-            $categories = $categories->where('name', 'like', '%' . request()->search . '%');
-        })->latest()->paginate(5);
-
-        //append query string to pagination links
-        $categories->appends(['search' => request()->search]);
-
-        //return with Api Resource
-        return new CategoryResource(true, 'List Data Categories', $categories);
+        try {
+            return CategoryServices::index();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -38,27 +31,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name'     => 'required|unique:categories',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        try {
+            return CategoryServices::store($request);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        //create category
-        $category = Category::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name, '-'),
-        ]);
-
-        if ($category) {
-            //return success with Api Resource
-            return new CategoryResource(true, 'Data Category Berhasil Disimpan!', $category);
-        }
-
-        //return failed with Api Resource
-        return new CategoryResource(false, 'Data Category Gagal Disimpan!', null);
     }
 
     /**
@@ -69,15 +46,11 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::whereId($id)->first();
-
-        if ($category) {
-            //return success with Api Resource
-            return new CategoryResource(true, 'Detail Data Category!', $category);
+        try {
+            return CategoryServices::show($id);
+        } catch (\Throwable $th) {
+            //throw $th;
         }
-
-        //return failed with Api Resource
-        return new CategoryResource(false, 'Detail Data Category Tidak DItemukan!', null);
     }
 
     /**
@@ -89,27 +62,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $validator = Validator::make($request->all(), [
-            'name'     => 'required|unique:categories,name,' . $category->id,
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        try {
+            return CategoryServices::update($request, $category);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        //update category without image
-        $category->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name, '-'),
-        ]);
-
-        if ($category) {
-            //return success with Api Resource
-            return new CategoryResource(true, 'Data Category Berhasil Diupdate!', $category);
-        }
-
-        //return failed with Api Resource
-        return new CategoryResource(false, 'Data Category Gagal Diupdate!', null);
     }
 
     /**
@@ -120,13 +77,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if ($category->delete()) {
-            //return success with Api Resource
-            return new CategoryResource(true, 'Data Category Berhasil Dihapus!', null);
+        try {
+            return CategoryServices::destroy($category);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        //return failed with Api Resource
-        return new CategoryResource(false, 'Data Category Gagal Dihapus!', null);
     }
 
     /**
@@ -136,10 +91,10 @@ class CategoryController extends Controller
      */
     public function all()
     {
-        //get categories
-        $categories = Category::latest()->get();
-
-        //return with Api Resource
-        return new CategoryResource(true, 'List Data Categories', $categories);
+        try {
+            return CategoryServices::all();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
