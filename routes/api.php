@@ -74,3 +74,37 @@ Route::prefix('admin')->group(function () {
             ->middleware('permission:aparaturs.index|aparaturs.store|aparaturs.update|aparaturs.delete');
     });
 });
+
+//group route with prefix "public"
+Route::prefix('public')->group(function () {
+
+    //index posts
+    Route::get('/posts', [App\Http\Controllers\Api\Publics\PostController::class, 'index']);
+
+    //show posts
+    Route::get('/posts/{slug}', [App\Http\Controllers\Api\Publics\PostController::class, 'show']);
+
+    //index posts home
+    Route::get('/posts_home', [App\Http\Controllers\Api\Publics\PostController::class, 'homePage']);
+
+    //index products
+    Route::get('/products', [App\Http\Controllers\Api\Publics\ProductController::class, 'index']);
+
+    //show page
+    Route::get('/products/{slug}', [App\Http\Controllers\Api\Publics\ProductController::class, 'show']);
+
+    //index products home
+    Route::get('/products_home', [App\Http\Controllers\Api\Publics\ProductController::class, 'homePage']);
+
+    //index pages
+    Route::get('/pages', [App\Http\Controllers\Api\Publics\PageController::class, 'index']);
+
+    //show page
+    Route::get('/pages/{slug}', [App\Http\Controllers\Api\Publics\PageController::class, 'show']);
+
+    //index aparaturs
+    Route::get('/aparaturs', [App\Http\Controllers\Api\Publics\AparaturController::class, 'index']);
+
+    //index sliders
+    Route::get('/sliders', [App\Http\Controllers\Api\Publics\SliderController::class, 'index']);
+});
