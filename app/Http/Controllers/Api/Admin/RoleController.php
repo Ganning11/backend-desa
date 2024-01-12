@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
+use App\Services\RoleServices;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
@@ -17,16 +18,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //get roles
-        $roles = Role::when(request()->search, function ($roles) {
-            $roles = $roles->where('name', 'like', '%' . request()->search . '%');
-        })->with('permissions')->latest()->paginate(5);
-
-        //append query string to pagination links
-        $roles->appends(['search' => request()->search]);
-
-        //return with Api Resource
-        return new RoleResource(true, 'List Data Roles', $roles);
+        try {
+            return RoleServices::index();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -37,31 +33,11 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        /**
-         * Validate request
-         */
-        $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'permissions'   => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        try {
+            return RoleServices::store($request);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        //create role
-        $role = Role::create(['name' => $request->name]);
-
-        //assign permissions to role
-        $role->givePermissionTo($request->permissions);
-
-        if ($role) {
-            //return success with Api Resource
-            return new RoleResource(true, 'Data Role Berhasil Disimpan!', $role);
-        }
-
-        //return failed with Api Resource
-        return new RoleResource(false, 'Data Role Gagal Disimpan!', null);
     }
 
     /**
@@ -72,16 +48,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        //get role
-        $role = Role::with('permissions')->findOrFail($id);
-
-        if ($role) {
-            //return success with Api Resource
-            return new RoleResource(true, 'Detail Data Role!', $role);
+        try {
+            return RoleServices::show($id);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        //return failed with Api Resource
-        return new RoleResource(false, 'Detail Data Role Tidak Ditemukan!', null);
     }
 
     /**
@@ -93,31 +64,11 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        /**
-         * validate request
-         */
-        $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'permissions'   => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        try {
+            return RoleServices::update($request, $role);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        //update role
-        $role->update(['name' => $request->name]);
-
-        //sync permissions
-        $role->syncPermissions($request->permissions);
-
-        if ($role) {
-            //return success with Api Resource
-            return new RoleResource(true, 'Data Role Berhasil Diupdate!', $role);
-        }
-
-        //return failed with Api Resource
-        return new RoleResource(false, 'Data Role Gagal Diupdate!', null);
     }
 
     /**
@@ -128,17 +79,11 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //find role by ID
-        $role = Role::findOrFail($id);
-
-        //delete role
-        if ($role->delete()) {
-            //return success with Api Resource
-            return new RoleResource(true, 'Data Role Berhasil Dihapus!', null);
+        try {
+            return RoleServices::destroy($id);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        //return failed with Api Resource
-        return new RoleResource(false, 'Data Role Gagal Dihapus!', null);
     }
 
     /**
@@ -148,10 +93,10 @@ class RoleController extends Controller
      */
     public function all()
     {
-        //get roles
-        $roles = Role::latest()->get();
-
-        //return with Api Resource
-        return new RoleResource(true, 'List Data Roles', $roles);
+        try {
+            return RoleServices::all();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
