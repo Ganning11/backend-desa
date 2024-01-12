@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
 use App\Http\Resources\PermissionResource;
+use App\Services\PermissionServices;
 
 class PermissionController extends Controller
 {
@@ -15,16 +16,11 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //get permissions
-        $permissions = Permission::when(request()->search, function ($permissions) {
-            $permissions = $permissions->where('name', 'like', '%' . request()->search . '%');
-        })->latest()->paginate(5);
-
-        //append query string to pagination links
-        $permissions->appends(['search' => request()->search]);
-
-        //return with Api Resource
-        return new PermissionResource(true, 'List Data Permissions', $permissions);
+        try {
+            return PermissionServices::index();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -34,10 +30,10 @@ class PermissionController extends Controller
      */
     public function all()
     {
-        //get permissions
-        $permissions = Permission::latest()->get();
-
-        //return with Api Resource
-        return new PermissionResource(true, 'List Data Permissions', $permissions);
+        try {
+            return PermissionServices::all();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }
