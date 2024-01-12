@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PageResource;
 use App\Services\PageServices;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class PageController extends Controller
 {
@@ -21,8 +24,15 @@ class PageController extends Controller
     {
         try {
             return PageServices::index();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -36,8 +46,15 @@ class PageController extends Controller
     {
         try {
             return PageServices::store($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -51,8 +68,15 @@ class PageController extends Controller
     {
         try {
             return PageServices::show($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -67,8 +91,15 @@ class PageController extends Controller
     {
         try {
             return PageServices::update($request, $page);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -82,8 +113,15 @@ class PageController extends Controller
     {
         try {
             return PageServices::destroy($page);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 }

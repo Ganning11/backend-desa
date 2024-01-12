@@ -9,7 +9,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductResource;
 use App\Services\ProductServices;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class ProductController extends Controller
 {
@@ -22,8 +25,15 @@ class ProductController extends Controller
     {
         try {
             return ProductServices::index();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -37,8 +47,15 @@ class ProductController extends Controller
     {
         try {
             return ProductServices::store($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -52,8 +69,15 @@ class ProductController extends Controller
     {
         try {
             return ProductServices::show($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -68,8 +92,15 @@ class ProductController extends Controller
     {
         try {
             return ProductServices::update($request, $product);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -83,8 +114,15 @@ class ProductController extends Controller
     {
         try {
             return ProductServices::destroy($product);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 }

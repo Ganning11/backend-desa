@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Services\PostServices;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class PostController extends Controller
 {
@@ -22,8 +25,15 @@ class PostController extends Controller
     {
         try {
             return PostServices::index();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -37,8 +47,15 @@ class PostController extends Controller
     {
         try {
             return PostServices::store($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -52,8 +69,15 @@ class PostController extends Controller
     {
         try {
             return PostServices::show($id);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -68,8 +92,15 @@ class PostController extends Controller
     {
         try {
             return PostServices::update($request, $post);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -83,8 +114,15 @@ class PostController extends Controller
     {
         try {
             return PostServices::destroy($post);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 }

@@ -6,6 +6,9 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\CategoryServices;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class CategoryController extends Controller
 {
@@ -18,8 +21,15 @@ class CategoryController extends Controller
     {
         try {
             return CategoryServices::index();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -33,8 +43,15 @@ class CategoryController extends Controller
     {
         try {
             return CategoryServices::store($request);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -48,8 +65,15 @@ class CategoryController extends Controller
     {
         try {
             return CategoryServices::show($id);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -64,8 +88,15 @@ class CategoryController extends Controller
     {
         try {
             return CategoryServices::update($request, $category);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -79,8 +110,15 @@ class CategoryController extends Controller
     {
         try {
             return CategoryServices::destroy($category);
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -93,8 +131,15 @@ class CategoryController extends Controller
     {
         try {
             return CategoryServices::all();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 }

@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
 use App\Http\Resources\PermissionResource;
 use App\Services\PermissionServices;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class PermissionController extends Controller
 {
@@ -18,8 +21,15 @@ class PermissionController extends Controller
     {
         try {
             return PermissionServices::index();
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 
@@ -32,8 +42,15 @@ class PermissionController extends Controller
     {
         try {
             return PermissionServices::all();
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (PermissionDoesNotExist $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (UnauthorizedException $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Anda tidak diizinkan.'], 403);
+        } catch (\Exception $e) {
+            Log::error('Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan.'], 500);
         }
     }
 }

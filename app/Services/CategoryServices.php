@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Category;
 use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,7 +14,7 @@ class CategoryServices
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public static function index()
     {
         //get categories
         $categories = Category::when(request()->search, function ($categories) {
@@ -35,7 +34,7 @@ class CategoryServices
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($request)
+    public static function store($request)
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|unique:categories',
@@ -66,7 +65,7 @@ class CategoryServices
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public static function show($id)
     {
         $category = Category::whereId($id)->first();
 
@@ -86,7 +85,7 @@ class CategoryServices
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($request, Category $category)
+    public static function update($request, Category $category)
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|unique:categories,name,' . $category->id,
@@ -117,7 +116,7 @@ class CategoryServices
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public static function destroy(Category $category)
     {
         if ($category->delete()) {
             //return success with Api Resource
@@ -133,7 +132,7 @@ class CategoryServices
      *
      * @return void
      */
-    public function all()
+    public static function all()
     {
         //get categories
         $categories = Category::latest()->get();
