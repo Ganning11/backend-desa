@@ -6,7 +6,6 @@ use App\Models\Post;
 use App\Models\Product;
 use App\Models\Aparatur;
 use App\Models\Category;
-use App\Http\Controllers\Controller;
 
 class DashboardServices
 {
