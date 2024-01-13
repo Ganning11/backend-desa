@@ -1,6 +1,5 @@
 $(document).ready(function () {
     $("#logoutButton").on("click", function () {
-        console.log("jordan babi");
         const apiEndpoint = "/api/logout";
         console.log(storedToken);
 
