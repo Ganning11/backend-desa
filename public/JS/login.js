@@ -43,7 +43,7 @@ $(document).ready(function () {
         } catch (error) {
             Swal.fire({
                 title: "Terjadi Kesalahan",
-                text: error.responseJSON.message,
+                text: "Email atau Password Salah",
                 icon: "error",
                 timer: 2000,
                 showConfirmButton: false,

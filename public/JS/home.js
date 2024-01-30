@@ -1,8 +1,6 @@
 $(document).ready(function () {
-    $("#logoutButton").on("click", function () {
+    function logout() {
         const apiEndpoint = "/api/logout";
-        console.log(storedToken);
-
         $.ajax({
             url: apiEndpoint,
             method: "POST",
@@ -11,21 +9,28 @@ $(document).ready(function () {
                 "Content-Type": "application/json",
             },
             success: function (response) {
-                window.location.href = "/login";
                 localStorage.removeItem("token");
+                $.removeCookie("token");
+                window.location.href = "/login";
             },
             error: function (xhr, status, error) {
                 console.error("Error:", xhr.responseText);
             },
         });
+    }
+    $("#logoutButton").on("click", function () {
+        console.log(storedToken);
+        logout();
     });
+
     let tokenTimeout;
 
     function setTokenTimeout() {
         tokenTimeout = setTimeout(function () {
             localStorage.removeItem("token");
+            $.removeCookie("token");
             window.location.href = "/login";
-        }, 600000);
+        }, 3600000); // 60 minutes
         // 600,000 milliseconds = 10 minutes
     }
 
@@ -38,13 +43,13 @@ $(document).ready(function () {
         resetTokenTimeout();
     });
 
+    $(window).on("unload", function () {
+        // setTokenTimeout();
+        console.log("buka");
+    });
+
+    // setTokenTimeout();
     $(window).on("beforeunload", function () {
-        setTokenTimeout();
         console.log("tutup");
     });
-    // $(window).on("unload", function () {
-    //     setTokenTimeout();
-    // });
-
-    setTokenTimeout();
 });

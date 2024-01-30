@@ -15,6 +15,11 @@ $(document).ready(function () {
         },
         error: function (xhr, status, error) {
             console.error("Error:", status, error);
+            // if (error === "Unauthorized") {
+            //     window.location.href = "/login";
+            //     localStorage.removeItem("token");
+            // } else {
+            // }
         },
     });
 });

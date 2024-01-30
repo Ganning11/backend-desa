@@ -18,18 +18,20 @@
     <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/fontawesome.css">
     <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/brands.css">
     <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/solid.css">
+    <script src="{{ url('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/jquery/jquery.cookie.js') }}"></script>
 
 
     <script>
         const storedToken = localStorage.getItem("token");
-
+        // $.cookie("nama", "");
+        // $.removeCookie("nama");
+        // alert($.cookie("nama"))
         if (!storedToken) {
             window.location.href = '/login';
             var queryString = window.location.pathname;
             localStorage.setItem("urlDefault", queryString);
         }
-
-
 
         console.log(storedToken);
     </script>
@@ -51,11 +53,12 @@
     </div>
 
     <!--My Script-->
-    <script src="{{ url('assets/vendor/jquery/jquery.min.js') }}"></script>
+
     <script src="{{ url('assets/vendor/js/bootstrap.bundle.min.js') }}"></script>
     <script src="/JS/sidebar.js"></script>
     <script src="{{ url('assets/vendor/datatables/js/jquery.dataTables.js') }}"></script>
     <script type="text/javascript" src="{{ url('JS/home.js') }}"></script>
+    <script src="{{ url('assets/js/sweetallert2.js') }}"></script>
     @yield('script')
 </body>
 

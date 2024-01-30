@@ -58,5 +58,6 @@
 <script src="{{ url('assets/vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ url('assets/vendor/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ url('JS/login.js') }}"></script>
+<script src="{{ url('assets/js/sweetallert2.js') }}"></script>
 
 </html>
